@@ -45,7 +45,7 @@ Contiene todos los módulos y ficheros que componen el proyecto y son necesarios
 
 ### Documentación
 
-* La documentación del framework puede ser consultada  [./doc/build/html/index.html]()
+* La documentación del framework puede ser consultada  [aquí](./doc/build/html/index.html)
  
 
 ### Instalación
