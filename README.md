@@ -45,15 +45,14 @@ Contiene todos los módulos y ficheros que componen el proyecto y son necesarios
 
 ### Documentación
 
-* La documentación del api se encuentra bajo el directorio doc/buil/html, el archivo principal _index.html_.
-* El informe de la experimentación se encuentra en el directorio //TODO
+* La documentación del framework puede ser consultada  [./doc/build/html/index.html]()
+ 
 
 ### Instalación
 
 Instrucciones de ionstalación
 
 ### Ejemplos de ejecución
--------------------------
 
 1. BipLocalSearch
 

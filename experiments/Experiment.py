@@ -28,19 +28,28 @@ class Experiment(object):
     @abc.abstractmethod
     def search_method(self):
         """
-            Método a utilizar en el experimento
+            Búsqueda local a utilizar en el experimento
+
+        """
+
+    @abc.abstractmethod
+    def ea_search_method(self):
+        """
+            Método computación evolutiva a utilizar en el experimento
 
         """
 
     @abc.abstractmethod
     def experiment(self, *argv):
         """
-            Experimento
+            Experimento a realizar
         """
 
     def getFiles(self, dir):
         """
-        Obtener todos los ficheros del directorio de instancias para el experimento
+            Obtiene todos los ficheros del directorio de instancias para el experimento
+
+        :parameter dir: directorio que contiene todos los ficheros con las instancias que intervendrán en el experimento
         """
         for root, dirs, files in os.walk(dir):
             for file in files:
