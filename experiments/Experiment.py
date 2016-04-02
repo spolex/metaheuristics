@@ -1,19 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import time     # tiempo cpu
 import abc
 from abc import ABCMeta
-import logging
 import os
 import numpy as np
-import sys
-
-log = logging.getLogger("Experiments")
-log.setLevel(logging.INFO)
-ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-log.addHandler(ch)
-
 
 class Experiment(object):
     __metaclass__ = ABCMeta

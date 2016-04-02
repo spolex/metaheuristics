@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import datetime
+import time
 
 
 def read(file, mode):
@@ -19,4 +19,4 @@ def date_formatter(formatter='%Y%m%d%H%M%S'):
     """
     Formateo de fechas en strings usando el formato recibido por parámetros
     """
-    return datetime.datetime.strptime(datetime.datetime.now(), formatter)
+    return time.strftime(formatter)

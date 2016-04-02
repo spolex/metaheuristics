@@ -4,4 +4,6 @@ __pycache__/
 *.pyc
 .idea
 doc/build/doctrees
+/Metaheuristicos.egg-info
+/main/BIP/_results
 doc/build/latex
