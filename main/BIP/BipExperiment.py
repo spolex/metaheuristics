@@ -5,6 +5,7 @@ import numpy as np
 from core.evaluators.BipEvaluator import readBipartInstance
 from experiments.Experiment import Experiment
 from main.BIP.BIPProblemVNS import BIPProblemVNS
+from core.utils.ioutils import date_formatter
 
 
 class BIPExperiment(Experiment):
@@ -48,13 +49,12 @@ if __name__ == '__main__':
     experiment = BIPExperiment('../main/Instances/BIP')
     np.set_printoptions(suppress=True)
     #experiment.experiment()
-    now = datetime.datetime.now()
     instance = readBipartInstance(experiment.files[0])
     n = instance.shape[1]
     solution = np.random.permutation(np.append(np.zeros(n / 2, dtype=int), np.ones(n / 2, dtype=int)))
     best_sol, best_vals = experiment.b_search_method(solution, n, instance, 100, 10)
     print(best_sol, best_vals)
-    np.savetxt("../main/BIP/results/"+'bipresults.csv', np.asarray(best_sol, dtype=int), delimiter=",", comments="# that is comment")
-    np.savetxt("../main/BIP/results/"+'bipresultsvals.csv', np.asarray(best_vals), delimiter=",", comments="# that is comment")
+    np.savetxt("../main/BIP/results/"+'bipresults'+date_formatter()+'.csv', np.asarray(best_sol, dtype=int), delimiter=",", comments="# that is comment")
+    np.savetxt("../main/BIP/results/"+'bipresultsvals'+date_formatter()+'.csv', np.asarray(best_vals), delimiter=",", comments="# that is comment")
     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 
