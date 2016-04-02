@@ -1,10 +1,9 @@
+from core.searches.local.advance.VNS import VNS
+from core.generators.Neighbours import swap2
+import numpy as np
 from random import randint
 
-import numpy as np
-
-from core.generators.Neighbours import swap2
-from core.searches.local.advance.VNS import VNS
-from main.QAP.search.advance.QAPAdvLocalSearch import Read_QAP_Instance, QAPProblem, qapCostEvaluator
+from main.QAP.QAPAdvLocalSearch import Read_QAP_Instance, QAPProblem, qapCostEvaluator
 
 
 class QAPProblemVNS(VNS):

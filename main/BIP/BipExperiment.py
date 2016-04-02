@@ -4,7 +4,7 @@ import numpy as np
 
 from core.evaluators.BipEvaluator import readBipartInstance
 from experiments.Experiment import Experiment
-from main.BIP.search.advance.BIPProblemVNS import BIPProblemVNS
+from main.BIP.BIPProblemVNS import BIPProblemVNS
 
 
 class BIPExperiment(Experiment):
@@ -17,7 +17,10 @@ class BIPExperiment(Experiment):
         Experiment.__init__(self, dir)
         self.getFiles(dir)
 
-    def search_method(self, *argv):
+    def ea_search_method(self):
+        super().ea_search_method()
+
+    def b_search_method(self, *argv):
         """
         Implementa la busqueda local para el experimento
         solution, n, instance, max_evals, nrep (& k)
@@ -42,17 +45,16 @@ class BIPExperiment(Experiment):
 
 if __name__ == '__main__':
     np.set_printoptions(precision=3)
-    experiment = QAPExperiment('../main/Instances/BIP')
+    experiment = BIPExperiment('../main/Instances/BIP')
     np.set_printoptions(suppress=True)
     #experiment.experiment()
     now = datetime.datetime.now()
     instance = readBipartInstance(experiment.files[0])
     n = instance.shape[1]
     solution = np.random.permutation(np.append(np.zeros(n / 2, dtype=int), np.ones(n / 2, dtype=int)))
-    best_sol, best_vals = experiment.search_method(solution, n, instance, 100, 10)
+    best_sol, best_vals = experiment.b_search_method(solution, n, instance, 100, 10)
     print(best_sol, best_vals)
-    np.savetxt("../main/Instances/BIP/results/"+'bipresults'+str(now)+".csv", np.asarray(best_sol, dtype=int), delimiter=",", comments="# that is comment")
-    np.savetxt("../main/Instances/BIP/results/"+'bipresultsvals'+str(now)+".csv", np.asarray(best_vals), delimiter=",", comments="# that is comment")
-
+    np.savetxt("../main/BIP/results/"+'bipresults.csv', np.asarray(best_sol, dtype=int), delimiter=",", comments="# that is comment")
+    np.savetxt("../main/BIP/results/"+'bipresultsvals.csv', np.asarray(best_vals), delimiter=",", comments="# that is comment")
     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 

@@ -4,7 +4,7 @@ import numpy as np
 
 from core.generators.Neighbours import swap201
 from core.searches.local.advance.VNS import VNS
-from main.BIP.search.advance.BipAdvLocalSearch import readBipartInstance, calcBipartCost,BIPProblem
+from main.BIP.BipAdvLocalSearch import readBipartInstance, calcBipartCost,BIPProblem
 
 
 class BIPProblemVNS(VNS):
