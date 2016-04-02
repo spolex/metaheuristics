@@ -11,8 +11,8 @@ Contiene todos los módulos agrupados en funcionlidad:
         1. **ea** algoritmos genéticos
         2. **local**
             1. **advance** búsqueda local con estrategias de 'escape': _BVNS_, SA...
-            2. **basic**
-    4. utils
+            2. **basic** búsqueda local básica
+    4. *utils*
 2. **experiments**
 3. main
     1. BIP problema de optimización combinatoria: bipartición balanceada del grafo
