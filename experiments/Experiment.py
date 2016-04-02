@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import time     # tiempo cpu
 import abc
 from abc import ABCMeta
 import os
-import numpy as np
+
 
 class Experiment(object):
     __metaclass__ = ABCMeta
@@ -26,6 +25,13 @@ class Experiment(object):
 
     @abc.abstractmethod
     def ea_search_method(self):
+        """
+            Método computación evolutiva a utilizar en el experimento
+
+        """
+
+    @abc.abstractmethod
+    def sa_search_method(self):
         """
             Método computación evolutiva a utilizar en el experimento
 

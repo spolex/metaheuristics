@@ -5,6 +5,7 @@ from core.searches.ea.BipEA import BipEA
 from core.evaluators.BipEvaluator import readBipartInstance
 from experiments.Experiment import Experiment
 from main.BIP.BIPProblemVNS import BIPProblemVNS
+from main.BIP.BipAdvLocalSearch import BipAdvLocalSearch
 import os
 import logging
 import sys
@@ -44,6 +45,14 @@ class BIPExperiment(Experiment):
         bipVNS = BIPProblemVNS(argv[0], argv[1], argv[2], argv[3], argv[4])
         return bipVNS.basic_vns()
 
+    def sa_search_method(self, *argv):
+        """
+        Implementa la busqueda local para el experimento
+        solution, n, instance, max_evals, nrep (& k) usando SA
+        bestsol, bestvals = BipAdvLocalSearch('../Instances/BIP/test/Cebe.bip.n10.1', [1,1,1,1,1,0,0,0,0,0],5000,100)
+        """
+        return BipAdvLocalSearch(argv[0], argv[1], argv[2], argv[3], argv[4])
+
     def experiment(self,from_evals=9, to_evals= 16, gen_k=15):
         """
         solution, maxevals, nrep
@@ -53,6 +62,7 @@ class BIPExperiment(Experiment):
         tmp = '_results'
         search = 'advance_VNS'
         genetic = 'ea'
+        sa = 'sa'
 
         for max_evals in range(from_evals,to_evals):
             count = 1
@@ -61,10 +71,13 @@ class BIPExperiment(Experiment):
                 # Initialize paths
                 s_path = os.path.join(tmp, search, str(count), str(2**max_evals))
                 ea_path = os.path.join(tmp, genetic, str(count), str(2**max_evals))
+                sa_path = os.path.join(tmp, sa, str(count), str(2**max_evals))
                 if not os.path.exists(s_path):
                     os.makedirs(s_path)
                 if not os.path.exists(ea_path):
                     os.makedirs(ea_path)
+                if not os.path.exists(sa_path):
+                    os.makedirs(sa_path)
 
                 # VNS
                 start_time = time.time()
@@ -86,7 +99,7 @@ class BIPExperiment(Experiment):
 
                 # Genetic
                 start_time = time.time()
-                best_sol, best_vals = BipEA(file, 2**max_evals, gen_k, verbose=True)
+                best_sol, best_vals = self.ea_search_method(file, 2**max_evals, gen_k, verbose=True)
                 elapsed = time.time() - start_time
 
                 # persistencia de los resultados
@@ -95,6 +108,19 @@ class BIPExperiment(Experiment):
                 np.savetxt(ea_path + '/ea_bipresultsvals' + date_formatter() + '.csv', np.asarray(best_vals), delimiter=",",
                            comments="# that is comment")
                 np.savetxt(ea_path+'/ea_cpu'+date_formatter()+'.csv', np.asarray([elapsed]), delimiter=",",
+                           comments="# that is comment")
+
+                # SA
+                start_time = time.time()
+                best_sol, best_vals = self.sa_search_method(file, 2**max_evals, gen_k, verbose=True)
+                elapsed = time.time() - start_time
+
+                # persistencia de los resultados
+                np.savetxt(sa_path + '/ea_bipresults' + date_formatter() + '.csv', np.asarray(best_sol, dtype=int),
+                           delimiter=",", comments="# that is comment")
+                np.savetxt(sa_path + '/ea_bipresultsvals' + date_formatter() + '.csv', np.asarray(best_vals), delimiter=",",
+                           comments="# that is comment")
+                np.savetxt(sa_path+'/ea_cpu'+date_formatter()+'.csv', np.asarray([elapsed]), delimiter=",",
                            comments="# that is comment")
 
                 count += 1
