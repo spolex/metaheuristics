@@ -15,7 +15,7 @@ def read(file, mode):
     return mylist
 
 
-def date_formatter(formatter='%Y%m%d%H%M%S'):
+def date_formatter(formatter='%Y%m%d-%H'):
     """
     Formateo de fechas en strings usando el formato recibido por parámetros
     """
