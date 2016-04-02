@@ -63,5 +63,5 @@ Instrucciones de instalación
 ### Authors
 -----------
 
-- Jose Ignacio Sánchez Méndez (spolex)
+- Iñigo Sánchez Méndez (spolex)
 (spolexdroid@gmail.com)
