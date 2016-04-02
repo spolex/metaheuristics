@@ -74,7 +74,7 @@ Contiene todos los módulos y ficheros que componen el proyecto y son necesarios
 
 ### Documentación
 
-* La documentación del framework puede ser consultada  [aquí](https://cdn.rawgit.com/spolex/metaheuristics/master/doc/build/html/index.html)
+* La documentación del framework puede ser consultada  en [este enlace](https://cdn.rawgit.com/spolex/metaheuristics/master/doc/build/html/index.html)
  
 
 ### Instalación
@@ -117,4 +117,4 @@ Instrucciones de ionstalación
 -----------
 
 - Jose Ignacio Sánchez Méndez (spolex)
-(jisanchez003@ikasle.ehu.es)
+(spolexdroid@gmail.com)
