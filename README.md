@@ -45,7 +45,7 @@ Contiene todos los módulos y ficheros que componen el proyecto y son necesarios
 
 ### Documentación
 
-* La documentación del framework puede ser consultada  [aquí](http://htmlpreview.github.io/?./doc/build/html/index.html)
+* La documentación del framework puede ser consultada  [aquí]( https://cdn.rawgit.com/spolex/metaheuristics/blob/master/doc/build/html/index.html)
  
 
 ### Instalación
