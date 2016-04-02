@@ -4,6 +4,7 @@
 import abc
 from abc import ABCMeta
 import os
+import numpy as np
 
 
 class Experiment(object):

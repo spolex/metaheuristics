@@ -6,6 +6,8 @@ from core.evaluators.BipEvaluator import readBipartInstance
 from experiments.Experiment import Experiment
 from main.BIP.BIPProblemVNS import BIPProblemVNS
 from main.BIP.BipAdvLocalSearch import BipAdvLocalSearch
+from pandas import DataFrame
+import numpy as np
 import os
 import logging
 import sys
@@ -22,6 +24,7 @@ log.addHandler(ch)
 
 class BIPExperiment(Experiment):
 
+
     def __init__(self, dir):
         """
         Clase creada para ejecutar los algoritmos relacionados con el problema de bipartición del grafo
@@ -29,6 +32,7 @@ class BIPExperiment(Experiment):
         """
         Experiment.__init__(self, dir)
         self.getFiles(dir)
+        self.results = DataFrame(columns=['time', 'max', 'min', 'median', 'max_evals', 'gen_k', 'iter', 'method'])
 
     def ea_search_method(self, *argv):
         """
@@ -51,25 +55,31 @@ class BIPExperiment(Experiment):
         solution, n, instance, max_evals, nrep (& k) usando SA
         bestsol, bestvals = BipAdvLocalSearch('../Instances/BIP/test/Cebe.bip.n10.1', [1,1,1,1,1,0,0,0,0,0],5000,100)
         """
-        return BipAdvLocalSearch(argv[0], argv[1], argv[2], argv[3], argv[4])
+        return BipAdvLocalSearch(argv[0], argv[1], argv[2], argv[3])
 
-    def experiment(self,from_evals=9, to_evals= 16, gen_k=15):
+    def experiment(self, from_evals=9, to_evals= 16, gen_k=15):
         """
         solution, maxevals, nrep
         """
 
         # Se inicializan los nombres de los directorios para la persistencia
         tmp = '_results'
-        search = 'advance_VNS'
-        genetic = 'ea'
-        sa = 'sa'
+        frame = os.path.join(tmp, 'Final')
+        if not os.path.exists(frame):
+            os.makedirs(frame)
+        vns = 'VNS'
+        genetic = 'AG'
+        sa = 'SA'
 
+        index = 0
+        iters = 0
         for max_evals in range(from_evals,to_evals):
+            iters += 1
             count = 1
             for file in self.files:
 
                 # Initialize paths
-                s_path = os.path.join(tmp, search, str(count), str(2**max_evals))
+                s_path = os.path.join(tmp, vns, str(count), str(2**max_evals))
                 ea_path = os.path.join(tmp, genetic, str(count), str(2**max_evals))
                 sa_path = os.path.join(tmp, sa, str(count), str(2**max_evals))
                 if not os.path.exists(s_path):
@@ -89,7 +99,11 @@ class BIPExperiment(Experiment):
                 best_sol, best_vals = self.search_method(solution, n, instance, 2**max_evals, gen_k)
                 elapsed = time.time() - start_time
 
+
                 #Persistencia de los resultados para el posterior análisis
+                self.results.loc[index] = ([elapsed, np.max(best_vals), np.min(best_vals), np.mean(best_vals), max_evals,
+                                       gen_k, iters, vns])
+                index += 1
                 np.savetxt(s_path+'/vns_bipresults'+date_formatter()+'.csv', np.asarray(best_sol, dtype=int), delimiter=",",
                            comments="# that is comment")
                 np.savetxt(s_path+'/vns_bipresultsvals'+date_formatter()+'.csv', np.asarray(best_vals), delimiter=",",
@@ -99,10 +113,13 @@ class BIPExperiment(Experiment):
 
                 # Genetic
                 start_time = time.time()
-                best_sol, best_vals = self.ea_search_method(file, 2**max_evals, gen_k, verbose=True)
+                best_sol, best_vals = self.ea_search_method(file, 2**max_evals, gen_k)
                 elapsed = time.time() - start_time
 
                 # persistencia de los resultados
+                self.results.loc([elapsed, np.max(best_vals), np.min(best_vals), np.mean(best_vals), max_evals,
+                                       gen_k, iters, genetic])
+                index += 1
                 np.savetxt(ea_path + '/ea_bipresults' + date_formatter() + '.csv', np.asarray(best_sol, dtype=int),
                            delimiter=",", comments="# that is comment")
                 np.savetxt(ea_path + '/ea_bipresultsvals' + date_formatter() + '.csv', np.asarray(best_vals), delimiter=",",
@@ -112,10 +129,14 @@ class BIPExperiment(Experiment):
 
                 # SA
                 start_time = time.time()
-                best_sol, best_vals = self.sa_search_method(file, 2**max_evals, gen_k, verbose=True)
+                solution = np.random.permutation(np.append(np.zeros(n / 2, dtype=int), np.ones(n / 2, dtype=int)))
+                best_sol, best_vals = self.sa_search_method(file, solution, 2**max_evals, gen_k)
                 elapsed = time.time() - start_time
 
                 # persistencia de los resultados
+                self.results.loc[index] = [elapsed, np.max(best_vals), np.min(best_vals), np.mean(best_vals), max_evals,
+                                       gen_k, iters, sa]
+                index += 1
                 np.savetxt(sa_path + '/ea_bipresults' + date_formatter() + '.csv', np.asarray(best_sol, dtype=int),
                            delimiter=",", comments="# that is comment")
                 np.savetxt(sa_path + '/ea_bipresultsvals' + date_formatter() + '.csv', np.asarray(best_vals), delimiter=",",
@@ -124,9 +145,13 @@ class BIPExperiment(Experiment):
                            comments="# that is comment")
 
                 count += 1
+                iters += 1
+
+        self.results.to_csv(os.path.join(frame, 'frame.csv'), sep=';', encoding='utf-8')
+
 
 if __name__ == '__main__':
-    dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Instances/BIP'))
+    dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'Instances/BIP'))
     experiment = BIPExperiment(dir)
-    experiment.experiment()
+    experiment.experiment(9, 10, 15)
 
