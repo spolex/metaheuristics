@@ -1,40 +1,41 @@
-from core.searches.local.advance.VNS import VNS
-from core.generators.Neighbours import swap201
-import numpy as np
 from random import randint
-from main.BIP.BipAdvLocalSearch import readBipartInstance, calcBipartCost,BIPProblem
+
+import numpy as np
+
+from core.generators.Neighbours import swap2
+from core.searches.local.advance.VNS import VNS
+from main.QAP.search.advance.QAPAdvLocalSearch import Read_QAP_Instance, QAPProblem, qapCostEvaluator
 
 
-class BIPProblemVNS(VNS):
+class QAPProblemVNS(VNS):
 
-    def __init__(self, init_solution, n, instance, max_e=None, nrep=None, maxC=None, minC=None, maximize=False):
-        if init_solution is not None and instance is not None and n:
+    def __init__(self, init_solution, n, mDist, mFlux, max_e=None, nrep=None, maxC=None, minC=None, maximize=False):
+        if mDist is not None and mFlux is not None and n:
             # Se obtienen las matrices de distanci y flujo,
             self.n = n
-            self.instance = instance
+            self.mDist = mDist
+            self.mFlux = mFlux
             self.max_evals = max_e
 
             # Se crea la clase especifica para aplicar enfriamiento estadístico al problema //TODO establecer tiempos de CPU
             # nrep corresponde con el número de vecindarios
             VNS.__init__(self, init_solution, nrep, maximize, None)
             # k=int(max_e/nrep) en este caso solo me interesa el mejor de cada búsqueda
-            # self.bip = BIPProblem(self.state, n, , int(max_e/nrep), int(max_e/nrep), nrep, maxC, minC, maximize=maximize)
-            self.bip = BIPProblem(solution=self.state, instance=instance, max_e=int(max_e/nrep), nrep=nrep, maxC=maxC, minC=minC)
-
+            self.qap = QAPProblem(self.state, n, mDist, mFlux, int(max_e/nrep), int(max_e/nrep), nrep, maxC, minC, maximize=maximize)
         else:
             raise ValueError(" Error en los argumentos no ha sido posible obtener todos los elementos que conforman el problema ")
 
     def local_search(self, *args):
         """
         """
-        self.bip.state = args[0]
-        return self.bip.search(True)
+        self.qap.state = args[0]
+        return self.qap.search(True)
 
     def cost(self, *kwargs):
         """
         """
         super().cost(*kwargs)
-        return calcBipartCost(self.instance, self.n, kwargs[0]['solution'])
+        return qapCostEvaluator(self.mDist, self.mFlux, kwargs[0]['solution'], self.n)
 
     def shake(self, *args):
         """
@@ -47,16 +48,16 @@ class BIPProblemVNS(VNS):
         """
         solution = argv[1]
         for k in range(argv[0]):
-            neighbour = swap201(np.asarray(solution))
+            neighbour = swap2(np.asarray(solution))
             self.N[k] = neighbour
             solution = neighbour[randint(0, neighbour.shape[0] - 1)]
 
 
-def BIPAdvVNSLocalSearch(fName, solution, max_eval, nrep = None, maxC= None, minC=None):
+def QAPAdvVNSLocalSearch(fName, solution, max_eval, nrep = None, maxC= None, minC=None):
 
     """
     Método búsqueda local usando enfriamiento estadístico
-    :param fName: archivo con la instancia del problema de bipartición del grafo.
+    :param fName: archivo con la instancia del problema de asignación cuadrática
     Formato txt:
     10
     0   126   1345   244   796   1018   7   151   347   1922
@@ -85,21 +86,20 @@ def BIPAdvVNSLocalSearch(fName, solution, max_eval, nrep = None, maxC= None, min
     :param k: almacenar mejor valor de la energía cada k evaluaciones
     :return: La mejor solución y los k mejores valores obtenidos en la búsqueda
     Ejemplo de ejecución:
-         >>> QAPAdvLocalSearch('../../Instances/BIP/test/Cebe.qap.n10.1', [1,1,1,1,1,0,0,0,0,0],100,10)
+         >>> QAPAdvLocalSearch('../../Instances/QAP/test/Cebe.qap.n10.1', [1,1,1,1,1,0,0,0,0,0],100,10)
     """
 
-    # Se obtienen la instancia BIP
-    instance = readBipartInstance(fName)
+    # Se obtienen las matrices de distanci y flujo,
+    n, mDist, mFluj = Read_QAP_Instance(fName)
 
     # Se crea la clase especifica para aplicar enfriamiento estadístico al problema
-    n = instance.shape[1]
-    bipVNS = BIPProblemVNS(solution, n,instance, max_eval, nrep, maxC, minC, maximize=True)
-    return bipVNS.basic_vns()
+    qapVNS = QAPProblemVNS(solution, n, mDist, mFluj, max_eval, nrep, maxC, minC, maximize=False)
+    return qapVNS.basic_vns()
 
 if __name__ == '__main__':
     # fName = sys.argv[1]
     # sol = eval(sys.argv[2])
     # max_evals = eval(sys.argv[3])
     # k = eval(sys.argv[4])
-    bestsol, bestvals = BIPAdvVNSLocalSearch('../Instances/BIP/test/Cebe.bip.n10.1', [0,1,1,0,1,0,1,0,1,0], max_eval=1000, nrep=10)
+    bestsol, bestvals = QAPAdvVNSLocalSearch('../Instances/QAP/test/Cebe.qap.n10.1', [1,2,3,4,5,6,7,8,9,10], max_eval=300000, nrep=10)
     print(bestsol, bestvals)

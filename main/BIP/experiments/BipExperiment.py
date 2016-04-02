@@ -1,8 +1,10 @@
-from experiments.Experiment import Experiment
-from main.BIP.BIPProblemVNS import BIPProblemVNS
-from core.evaluators.BipEvaluator import readBipartInstance
-import numpy as np
 import datetime
+
+import numpy as np
+
+from core.evaluators.BipEvaluator import readBipartInstance
+from experiments.Experiment import Experiment
+from main.BIP.search.advance.BIPProblemVNS import BIPProblemVNS
 
 
 class BIPExperiment(Experiment):
