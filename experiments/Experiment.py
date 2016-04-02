@@ -18,7 +18,7 @@ class Experiment(object):
             raise ValueError("El directorio con las instancias es requerido")
 
     @abc.abstractmethod
-    def b_search_method(self):
+    def search_method(self):
         """
             Búsqueda local a utilizar en el experimento
 
