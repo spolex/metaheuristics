@@ -9,11 +9,11 @@ Contiene todos los módulos agrupados en funcionlidad:
     2. **generators** generadores de vecindarios/poblaciones
     3. **searches** algoritmos de búsqueda 
         1. **ea** algoritmos genéticos
-        2. **local** 
+        2. **local**
             1. **advance** búsqueda local con estrategias de 'escape': _BVNS_, SA...
             2. **basic**
     4. utils
-2. experiments
+2. **experiments**
 3. main
     1. BIP problema de optimización combinatoria: bipartición balanceada del grafo
     2. QAP problema de optimización combinatoria: asignación cuadrática
