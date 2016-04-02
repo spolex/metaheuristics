@@ -5,7 +5,7 @@
 Contiene todos los módulos y ficheros que componen el proyecto y son necesarios para el correcto funcionamiento:
 
 ```
-.
+..
 ├── core
 │   ├── evaluators
 │   │   ├── BipEvaluator.py
@@ -15,29 +15,58 @@ Contiene todos los módulos y ficheros que componen el proyecto y son necesarios
 │   ├── searches
 │   │   ├── ea
 │   │   │   ├── BipEA.py
+│   │   │   ├── QAPEA.py
 │   │   │   └── UMDA.py
+│   │   ├── __init__.py
+│   │   ├── local
 │   │   │   ├── advance
 │   │   │   │   ├── Anneal.py
+│   │   │   │   └── VNS.py
 │   │   │   ├── basic
 │   │   │   │   ├── BasicLocalSearches.py
-│   │   │   │   ├── BasicLocalSearches.pyc
 │   └── utils
 │       ├── ioutils.py
 ├── doc
-│   ├── build
-│   │   └── html
+├── experiments
+│   ├── Experiment.py
+│   ├── __init__.py
+├── __init__.py
 ├── main
 │   ├── BIP
 │   │   ├── BipAdvEA.py
 │   │   ├── BipAdvLocalSearch.py
+│   │   ├── BipExperiment.py
 │   │   ├── BipLocalSearch.py
+│   │   ├── BIPProblemVNS.py
 │   ├── Instances
 │   │   ├── BIP
+│   │   │   ├── Cebe.bip.n50.1
+│   │   │   ├── Cebe.bip.n50.2
+│   │   │   ├── Cebe.bip.n50.3
+│   │   │   ├── Cebe.bip.n50.4
+│   │   │   ├── Cebe.bip.n50.5
+│   │   │   ├── Cebe.bip.n80.1
+│   │   │   ├── Cebe.bip.n80.2
+│   │   │   ├── Cebe.bip.n80.3
+│   │   │   ├── Cebe.bip.n80.4
+│   │   │   ├── Cebe.bip.n80.5
+│   │   │   └── results
 │   │   └── QAP
+│   │       ├── Cebe.qap.n30.1
+│   │       ├── Cebe.qap.n30.2
+│   │       ├── Cebe.qap.n30.3
+│   │       ├── Cebe.qap.n30.4
+│   │       ├── Cebe.qap.n30.5
+│   │       ├── Cebe.qap.n50.1
+│   │       ├── Cebe.qap.n50.2
+│   │       ├── Cebe.qap.n50.3
+│   │       ├── Cebe.qap.n50.4
+│   │       └── Cebe.qap.n50.5
 │   └── QAP
 │       ├── QAPAdvEA.py
 │       ├── QAPAdvLocalSearch.py
-│       └── QAPLocalSearch.py
+│       ├── QAPLocalSearch.py
+│       └── QAPProblemVNS.py
 └── README.md
 
 ```
