@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Mar  6 10:33:25 2016
+import datetime
 
-@author: Jose Ignacio Sanchez Mendez
-"""
 
 def read(file, mode):
     """
     Para la lectura de instancia de problemas combinatorios desde archivos de texto
+    :param file: path del archivo
+    :param mode: modo de apertura
     """
     hdl = open(file, mode)
-    lista = hdl.readlines()
+    mylist = hdl.readlines()
     hdl.close()
-    return lista
+    return mylist
 
 
+def date_formatter(formatter='%Y%m%d%H%M%S'):
+    """
+    Formateo de fechas en strings usando el formato recibido por parámetros
+    """
+    return datetime.datetime.strptime(datetime.datetime.now(), formatter)
