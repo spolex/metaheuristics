@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Mar  6 10:27:33 2016
-
-@author: Jose Ignacio Sanchez Mendez
-"""
 import sys
 import numpy as np
 from core.utils import ioutils as u
@@ -17,7 +12,7 @@ def readBipartInstance(fileName):
      pAristas = np.zeros((n,n))      
      for i in range(n):
        for j,val in enumerate(milista[i+1].split()):     
-         pAristas[i,j]=eval(val)         
+         pAristas[i, j] = eval(val)
      return pAristas
      
 def calcBipartCost(pAristas, n, sol):
@@ -26,7 +21,7 @@ def calcBipartCost(pAristas, n, sol):
     for i in range(n-1):
      for j in range(i+1, n):
        if sol[i] == 1-sol[j]:      # Si estan en partes diferentes
-          fval = fval+pAristas[i,j] 
+          fval = fval+pAristas[i, j]
     return fval
  
 def BipEvaluator(fileName,sol):
