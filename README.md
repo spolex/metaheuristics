@@ -18,8 +18,6 @@ Contiene todos los módulos agrupados en funcionlidad:
     1. BIP problema de optimización combinatoria: bipartición balanceada del grafo
     2. QAP problema de optimización combinatoria: asignación cuadrática
     3. Instances instancias de test
-```
-
 
 ### Documentación
 
