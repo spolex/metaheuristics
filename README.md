@@ -2,73 +2,22 @@
 
 ## Packages
 
-Contiene todos los módulos y ficheros que componen el proyecto y son necesarios para el correcto funcionamiento:
+Contiene todos los módulos agrupados en funcionlidad:
 
-```
-..
-├── core
-│   ├── evaluators
-│   │   ├── BipEvaluator.py
-│   │   └── QAPEvaluator.py
-│   ├── generators
-│   │   ├── Neighbours.py
-│   ├── searches
-│   │   ├── ea
-│   │   │   ├── BipEA.py
-│   │   │   ├── QAPEA.py
-│   │   │   └── UMDA.py
-│   │   ├── __init__.py
-│   │   ├── local
-│   │   │   ├── advance
-│   │   │   │   ├── Anneal.py
-│   │   │   │   └── VNS.py
-│   │   │   ├── basic
-│   │   │   │   ├── BasicLocalSearches.py
-│   └── utils
-│       ├── ioutils.py
-├── doc
-├── experiments
-│   ├── Experiment.py
-│   ├── __init__.py
-├── __init__.py
-├── main
-│   ├── BIP
-│   │   ├── BipAdvEA.py
-│   │   ├── BipAdvLocalSearch.py
-│   │   ├── BipExperiment.py
-│   │   ├── BipLocalSearch.py
-│   │   ├── BIPProblemVNS.py
-│   ├── Instances
-│   │   ├── BIP
-│   │   │   ├── Cebe.bip.n50.1
-│   │   │   ├── Cebe.bip.n50.2
-│   │   │   ├── Cebe.bip.n50.3
-│   │   │   ├── Cebe.bip.n50.4
-│   │   │   ├── Cebe.bip.n50.5
-│   │   │   ├── Cebe.bip.n80.1
-│   │   │   ├── Cebe.bip.n80.2
-│   │   │   ├── Cebe.bip.n80.3
-│   │   │   ├── Cebe.bip.n80.4
-│   │   │   ├── Cebe.bip.n80.5
-│   │   │   └── results
-│   │   └── QAP
-│   │       ├── Cebe.qap.n30.1
-│   │       ├── Cebe.qap.n30.2
-│   │       ├── Cebe.qap.n30.3
-│   │       ├── Cebe.qap.n30.4
-│   │       ├── Cebe.qap.n30.5
-│   │       ├── Cebe.qap.n50.1
-│   │       ├── Cebe.qap.n50.2
-│   │       ├── Cebe.qap.n50.3
-│   │       ├── Cebe.qap.n50.4
-│   │       └── Cebe.qap.n50.5
-│   └── QAP
-│       ├── QAPAdvEA.py
-│       ├── QAPAdvLocalSearch.py
-│       ├── QAPLocalSearch.py
-│       └── QAPProblemVNS.py
-└── README.md
-
+1. **core** Implementa las funcionalidades transversales a todo el API
+    1. **evaluators** funciones de adaptación
+    2. **generators** generadores de vecindarios/poblaciones
+    3. **searches** algoritmos de búsqueda 
+        1. **ea** algoritmos genéticos
+        2. **local** 
+            1. **advance** búsqueda local con estrategias de 'escape': _BVNS_, SA...
+            2. **basic**
+    4. utils
+2. experiments
+3. main
+    1. BIP problema de optimización combinatoria: bipartición balanceada del grafo
+    2. QAP problema de optimización combinatoria: asignación cuadrática
+    3. Instances instancias de test
 ```
 
 
@@ -79,7 +28,7 @@ Contiene todos los módulos y ficheros que componen el proyecto y son necesarios
 
 ### Instalación
 
-Instrucciones de ionstalación
+Instrucciones de instalación
 
 ### Ejemplos de ejecución
 
