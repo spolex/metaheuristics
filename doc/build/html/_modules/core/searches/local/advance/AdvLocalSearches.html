@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>core.searches.local.advance.AdvLocalSearches &mdash; documentación de EC - 0</title>
+    
+    <link rel="stylesheet" href="../../../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../../',
+        VERSION:     '0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../../_static/translations.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="documentación de EC - 0" href="../../../../../index.html" />
+    <link rel="up" title="core" href="../../../../core.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="Índice General"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Índice de Módulos Python"
+             >módulos</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../index.html">documentación de EC - 0</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../index.html" >Código de módulo</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../../../core.html" accesskey="U">core</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Código fuente para core.searches.local.advance.AdvLocalSearches</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python3</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">core.generators.Neighbours</span> <span class="kn">import</span> <span class="n">swap201</span>
+<span class="kn">from</span> <span class="nn">main.BIP.BipEvaluator</span> <span class="kn">import</span> <span class="n">calcBipartCost</span>
+<span class="kn">from</span> <span class="nn">core.searches.local.basic.BasicLocalSearches</span> <span class="kn">import</span> <span class="n">BIPLocalSearchSwap201</span>
+
+
+
+<div class="viewcode-block" id="BIPAdvGRASP"><a class="viewcode-back" href="../../../../../modules/core.html#core.searches.local.advance.AdvLocalSearches.BIPAdvGRASP">[documentos]</a><span class="k">def</span> <span class="nf">BIPAdvGRASP</span><span class="p">(</span><span class="n">pAristas</span><span class="p">,</span> <span class="n">initSolution</span><span class="p">,</span> <span class="n">max_eval</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Búsqueda GRASP</span>
+
+<span class="sd">    :param pAristas: matriz de pesos de los arcos.</span>
+<span class="sd">    :param initSolution: vector con la solución inicial.</span>
+<span class="sd">    :param max_eval: número máximo de evaluaciones permitidas por el algoritmo.</span>
+<span class="sd">    :param k: identifica cada cuantas evaluaciones es necesario calcular el valor del mejor individuo hasta el momento.</span>
+<span class="sd">    :type pAristas: array.</span>
+<span class="sd">    :type initSolution: vector.</span>
+<span class="sd">    :type max_eval: int.</span>
+<span class="sd">    :type k: int.</span>
+<span class="sd">    :return:</span>
+<span class="sd">        - Solución final.</span>
+<span class="sd">        - Vector con el valor de la mejor solución encontrada cada k evaluaciones. Es un vector de tamaño max_eval/k, donde max_eval es un múltiplo de k. La componente i del vector contiene cuál ha sido el mejor valor encontrado por la búsqueda tras i*(max_eval/k) evalueaciones.</span>
+<span class="sd">     &gt;&gt;&gt; best_sol, best_vals = BipAdvLocalSearch(&#39;../Instances/BIP ART /Cebe.bip.n10.1&#39;,[1,1,1,1,1,0,0,0,0,0],100,10)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">pAristas</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">best_val</span> <span class="o">=</span> <span class="n">calcBipartCost</span><span class="p">(</span><span class="n">pAristas</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">initSolution</span><span class="p">)</span>              <span class="c"># Mejor valor</span>
+    <span class="n">best_sol</span> <span class="o">=</span> <span class="n">initSolution</span>                                             <span class="c"># Mejor solución</span>
+    <span class="n">improve</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">while</span> <span class="n">improve</span><span class="p">:</span>
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">swap201</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">best_sol</span><span class="p">))</span>            <span class="c"># Todos los vecinos</span>
+        <span class="n">n_neighbors</span> <span class="o">=</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">best_val_among_neighbors</span> <span class="o">=</span> <span class="n">best_val</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_neighbors</span><span class="p">):</span>
+            <span class="n">sol</span> <span class="o">=</span> <span class="n">neighbors</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">fval</span> <span class="o">=</span> <span class="n">calcBipartCost</span><span class="p">(</span><span class="n">pAristas</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">sol</span><span class="p">)</span>    <span class="c"># Se evalua la función</span>
+            <span class="k">if</span> <span class="n">fval</span> <span class="o">&gt;</span> <span class="n">best_val_among_neighbors</span><span class="p">:</span>             <span class="c"># Si es mejor que el mejor valor entre los vecinos hasta el momento (max)</span>
+                <span class="n">best_val_among_neighbors</span> <span class="o">=</span> <span class="n">fval</span>           <span class="c"># se actualiza el mejor valor y solución</span>
+                <span class="n">best_sol_among_neighbors</span> <span class="o">=</span> <span class="n">sol</span>
+        <span class="n">improve</span> <span class="o">=</span> <span class="p">(</span><span class="n">best_val_among_neighbors</span><span class="o">&gt;</span><span class="n">best_val</span><span class="p">)</span> <span class="c">#  Se determina si ha habido mejora con respecto al ciclo anterior</span>
+        <span class="k">if</span> <span class="n">improve</span><span class="p">:</span>
+            <span class="n">best_val</span> <span class="o">=</span> <span class="n">best_val_among_neighbors</span>           <span class="c"># Se actualiza el mejor valor y la mejor solución</span>
+            <span class="n">best_sol</span> <span class="o">=</span> <span class="n">best_sol_among_neighbors</span>
+            <span class="c">#print(best_val,best_sol)</span>
+    <span class="k">return</span> <span class="n">best_val</span><span class="p">,</span> <span class="n">best_sol</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Búsqueda rápida</h3>
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Ir a" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="Índice General"
+             >índice</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Índice de Módulos Python"
+             >módulos</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../index.html">documentación de EC - 0</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../index.html" >Código de módulo</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../../../core.html" >core</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Jose Ignacio Sanchez.
+      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 1.4b1.
+    </div>
+  </body>
+</html>

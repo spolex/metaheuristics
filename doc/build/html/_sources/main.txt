@@ -1,0 +1,4 @@
+Módulo main
+===========
+
+.. automodule:: main

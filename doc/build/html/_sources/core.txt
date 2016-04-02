@@ -1,0 +1,25 @@
+Módulo core
+===========
+.. automodule:: core
+    :members:
+
+Generadores de poblaciones y/o vecindarios
+------------------------------------------
+
+.. automodule:: core.generators
+    :members:
+
+Vecindarios
+^^^^^^^^^^^
+
+.. automodule:: core.generators.Neighbours
+    :members:
+
+Poblaciones
+^^^^^^^^^^^
+
+Utils
+-----
+
+.. automodule:: core.utils
+    :members:

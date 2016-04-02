@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Módulo core &mdash; documentación de EC - 0</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="documentación de EC - 0" href="../index.html" />
+    <link rel="next" title="Módulo main" href="main.html" />
+    <link rel="prev" title="Introducción" href="../intro.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Índice General"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Índice de Módulos Python"
+             >módulos</a> |</li>
+        <li class="right" >
+          <a href="main.html" title="Módulo main"
+             accesskey="N">siguiente</a> |</li>
+        <li class="right" >
+          <a href="../intro.html" title="Introducción"
+             accesskey="P">anterior</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de EC - 0</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-core">
+<span id="modulo-core"></span><h1>Módulo core<a class="headerlink" href="#module-core" title="Enlazar permanentemente con este título">¶</a></h1>
+<p>Módulo que contiene la implementación del nucleo de la aplicación, las cuáles se recogen a continuación</p>
+<div class="section" id="module-core.generators">
+<span id="generadores-de-poblaciones-y-o-vecindarios"></span><h2>Generadores de poblaciones y/o vecindarios<a class="headerlink" href="#module-core.generators" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Módulo para la generación de vecindad y poblaciones</p>
+<div class="section" id="module-core.generators.Neighbours">
+<span id="vecindarios"></span><h3>Vecindarios<a class="headerlink" href="#module-core.generators.Neighbours" title="Enlazar permanentemente con este título">¶</a></h3>
+<dl class="function">
+<dt id="core.generators.Neighbours.swap2">
+<code class="descclassname">core.generators.Neighbours.</code><code class="descname">swap2</code><span class="sig-paren">(</span><em>perm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/generators/Neighbours.html#swap2"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#core.generators.Neighbours.swap2" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Son soluciones vecinas todas aquellas que se generan intercambiando de lugar
+dos posiciones de la permutación. Por ejemplo, la vecindad de x = [1, 2, 3, 4]
+V(e) es:</p>
+<blockquote>
+<div><p>{
+[2, 1, 3, 4], [3, 2, 1, 4],
+[4, 2, 3, 1], [1, 3, 2, 4],
+[1, 4, 3, 2], [1, 2, 4, 3]</p>
+<blockquote>
+<div>}</div></blockquote>
+</div></blockquote>
+<p>pre: Se recibe por parámetros una solución propuesta en forma de vector.
+post: Se devuelve el sistema de vecinos V(e).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.generators.Neighbours.swap201">
+<code class="descclassname">core.generators.Neighbours.</code><code class="descname">swap201</code><span class="sig-paren">(</span><em>perm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/generators/Neighbours.html#swap201"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#core.generators.Neighbours.swap201" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>swap201  obtiene el sistema de vecinos V(e) intercambiando dos
+posiciones tales que una tenga valor 1 y la otra 0.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parámetros:</th><td class="field-body"><strong>perm</strong> &#8211; solución inicial propuesta.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Devuelve:</th><td class="field-body">sistema de vecinos V(e)</td>
+</tr>
+</tbody>
+</table>
+<p>Pre: perm es la solución a partir de la cuál hay que generar el sistema de
+vecinos.
+Post: Se devuelve el sistema de vecinos V(e).</p>
+</dd></dl>
+
+</div>
+<div class="section" id="poblaciones">
+<h3>Poblaciones<a class="headerlink" href="#poblaciones" title="Enlazar permanentemente con este título">¶</a></h3>
+</div>
+</div>
+<div class="section" id="module-core.searches">
+<span id="busquedas"></span><h2>Búsquedas<a class="headerlink" href="#module-core.searches" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Módulo que contiene la implementación de las búsquedas locales. Desde búsquedas locales simples hasta
+la computación evolutiva.</p>
+<div class="section" id="module-core.searches.local">
+<span id="local"></span><h3>Local<a class="headerlink" href="#module-core.searches.local" title="Enlazar permanentemente con este título">¶</a></h3>
+<p>Contiene la implementación de las búsquedas locales</p>
+<div class="section" id="module-core.searches.local.basic">
+<span id="simple"></span><h4>Simple<a class="headerlink" href="#module-core.searches.local.basic" title="Enlazar permanentemente con este título">¶</a></h4>
+<p>Contiene la implementación de las búsquedas locales simples</p>
+</div>
+<div class="section" id="module-core.searches.local.advance">
+<span id="avanzada"></span><h4>Avanzada<a class="headerlink" href="#module-core.searches.local.advance" title="Enlazar permanentemente con este título">¶</a></h4>
+<p>Contiene la implementación de las búsquedas locales avanzadas</p>
+<div class="section" id="grasp">
+<h5>GRASP<a class="headerlink" href="#grasp" title="Enlazar permanentemente con este título">¶</a></h5>
+</div>
+</div>
+</div>
+<div class="section" id="computacion-evolutiva">
+<h3>Computación evolutiva<a class="headerlink" href="#computacion-evolutiva" title="Enlazar permanentemente con este título">¶</a></h3>
+<p>Referencia al framework de computación evolutiva utilizado <a class="reference external" href="http://deap.readthedocs.org/en/master/">deap</a></p>
+</div>
+</div>
+<div class="section" id="module-core.utils">
+<span id="utils"></span><h2>Utils<a class="headerlink" href="#module-core.utils" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Módulo de utilidades como por ejemplo lectura de un fichero con las  instancias del problema combinatorio</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Tabla de Contenidos</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Módulo core</a><ul>
+<li><a class="reference internal" href="#module-core.generators">Generadores de poblaciones y/o vecindarios</a><ul>
+<li><a class="reference internal" href="#module-core.generators.Neighbours">Vecindarios</a></li>
+<li><a class="reference internal" href="#poblaciones">Poblaciones</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-core.searches">Búsquedas</a><ul>
+<li><a class="reference internal" href="#module-core.searches.local">Local</a><ul>
+<li><a class="reference internal" href="#module-core.searches.local.basic">Simple</a></li>
+<li><a class="reference internal" href="#module-core.searches.local.advance">Avanzada</a><ul>
+<li><a class="reference internal" href="#grasp">GRASP</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#computacion-evolutiva">Computación evolutiva</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-core.utils">Utils</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Tema anterior</h4>
+  <p class="topless"><a href="../intro.html"
+                        title="capítulo anterior">Introducción</a></p>
+  <h4>Próximo tema</h4>
+  <p class="topless"><a href="main.html"
+                        title="próximo capítulo">Módulo main</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Esta página</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/modules/core.txt"
+            rel="nofollow">Mostrar el código</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Búsqueda rápida</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Ir a" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="Índice General"
+             >índice</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Índice de Módulos Python"
+             >módulos</a> |</li>
+        <li class="right" >
+          <a href="main.html" title="Módulo main"
+             >siguiente</a> |</li>
+        <li class="right" >
+          <a href="../intro.html" title="Introducción"
+             >anterior</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de EC - 0</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Jose Ignacio Sanchez.
+      Creado con <a href="http://sphinx-doc.org/">Sphinx</a> 1.4b1.
+    </div>
+  </body>
+</html>
