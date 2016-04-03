@@ -77,7 +77,7 @@ def QAPEA(fName, pobSize, genNums):
     rdo= algorithms.eaGenerateUpdate(toolbox, ngen=genNums, stats=stats, halloffame=hof,verbose=True)
     evals = [ dic['min'] for dic in rdo[1] ]
     
-    return (hof[0],evals)
+    return hof[0], sorted(evals, reverse=True)
     
 if __name__ == '__main__':
     # fName = sys.argv[1]

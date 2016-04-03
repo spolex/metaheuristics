@@ -6,10 +6,8 @@
 
 import logging
 import sys
-
 import numpy as np
 from deap import base, creator, tools, algorithms
-
 from core.evaluators import BipEvaluator as bie
 
 log = logging.getLogger("BipEA")
@@ -21,7 +19,6 @@ ch.setFormatter(formatter)
 log.addHandler(ch)
 
 
-
 def naturalSelection(fenotype):
     """
     Función que se encarga de la selección natural, es decir aquellos fenotipos
@@ -29,16 +26,15 @@ def naturalSelection(fenotype):
     un 0 en la función de evaluación para que no puedan formar parte de la
     evolución genética
     """
-    return (sum(fenotype)==int(len(fenotype)/2))
+    return sum(fenotype) == int(len(fenotype)/2)
+
     
-def evalBip(mWeight, n, fenotype, verbose= False):
+def evalBip(mWeight, n, fenotype):
     """
     Función de adaptación diseñada para el problema de bipartición del grafo.
     pre: recibe por parámetros la matriz de pesos y el fenotipo
     post:
     """
-    if verbose:
-        log.setLevel(logging.DEBUG)
     fval = 0
     if(not naturalSelection(fenotype)):
         log.debug("Soy una solución inútil")
@@ -50,6 +46,7 @@ def evalBip(mWeight, n, fenotype, verbose= False):
           fval = fval+mWeight[i,j] 
     return (fval,)
 
+
 def createMaxRace():
     """
     Función que genera los tipos deap necesarios
@@ -59,14 +56,16 @@ def createMaxRace():
     # Se crea una clase individuo asociada a la clase FitnessMax
     creator.create("Individual", list, fitness=creator.FitnessMax)
 
+
 def bornBipRandomfenotype(n):
     """
     Función que genera un fenotipo válido (balanceado) 
     """
-    sample=np.zeros(n, dtype=int)
+    sample = np.zeros(n, dtype=int)
     for i in range(int(n/2)):
-        sample[i]=1 
-    return (np.random.permutation(sample))
+        sample[i] = 1
+    return np.random.permutation(sample)
+
 
 def buildBipRandomPopulation(size, l, toolbox):  
 
@@ -76,11 +75,14 @@ def buildBipRandomPopulation(size, l, toolbox):
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
     return toolbox.population(n=size)
 
-def BipEA(fName, pobSize, genNums, verbose= False):
+
+def BipEA(fName, pobSize, genNums, verbose=False):
     """
     Pre:El problema que resuelve es de maximización.
     Post:
-    """    
+    """
+    if verbose:
+        log.setLevel(logging.DEBUG)
     createMaxRace()
     
      # Heredamos las clases y funciones implementadas como parte de DEAP
@@ -94,17 +96,17 @@ def BipEA(fName, pobSize, genNums, verbose= False):
     population = buildBipRandomPopulation(pobSize, n, toolbox)
     
     # Asociamos como función de aptitud la función evalBip
-    toolbox.register("evaluate", evalBip, instance, n, verbose=verbose)
-    # Nuestro operador de cruzamiento será el recomendado cruzamiento en 2 puntos
-    toolbox.register("mate", tools.cxTwoPoint)
+    toolbox.register("evaluate", evalBip, instance, n)
+    # Nuestro operador de cruzamiento será //TODO document
+    toolbox.register("mate", tools.cxOrdered)
     # El operador de mutación cambiará 1-->0  y 0-->1 con una probabilidad 
     # de mutación de 1/(lambda**0.9318)*(l**0.4535) recomendada
-    toolbox.register("mutate", tools.mutFlipBit, indpb=1/((pobSize**0.9318)*(n**0.4535)))
+    toolbox.register("mutate", tools.mutShuffleIndexes, indpb=1/((pobSize**0.9318)*(n**0.4535)))
     # Usaremos selección por torneo con un parámetro de torneo = 3
     toolbox.register("select", tools.selTournament, tournsize=3)
-    # Incluimos los 
+
+    # estadísticos incluidos
     stats = tools.Statistics(lambda ind: ind.fitness.values)
-    #Obtenemos el resultado de el mejor valor de la funcion obtenido por el 
     #algoritmo en cada generación
     stats.register("max", np.max)
     
@@ -113,10 +115,13 @@ def BipEA(fName, pobSize, genNums, verbose= False):
     
     # Probabilidad de cruzamiento 0.8
     # Probabilidad de aplicar el operador de mutación 0.2    
-    rdo = algorithms.eaSimple(population, toolbox, stats=stats,cxpb=0.8, mutpb=0.2, ngen=genNums, halloffame=hof, verbose=True)
+    rdo = algorithms.eaSimple(population, toolbox, stats=stats, cxpb=0.8, mutpb=0.2, ngen=genNums, halloffame=hof, verbose=True)
     
-    evals = [ dic['max'] for dic in rdo[1] ]
-    return (hof[0],evals)
+    evals = [dic['max'] for dic in rdo[1]]
+    for i in range(1, len(evals)):
+        if evals[i] < evals[i-1]:
+            evals[i] = evals[i-1]
+    return hof[0], evals
     
 
 if __name__ == '__main__':

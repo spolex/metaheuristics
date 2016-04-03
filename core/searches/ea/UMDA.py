@@ -17,9 +17,10 @@ class UMDA(object):
         
 
     def generate(self, ind_init):
+        # //TODO se están generando permutaciones aleatorias en está función, por esto no da errores, pero no es correcto
         # Generate N individuals and put them into the provided class
         
-        # First, an empty,array fir population is created
+        # First, an empty,array first population is created
         arz = []          
         for i in range(0,self.N):
           # A random permutation of size n is generated for each variable
@@ -27,6 +28,7 @@ class UMDA(object):
         return list(map(ind_init, arz))
     
     def update(self, population):
+        # //TODO Está definido para problemas binarios, no permutaciones
         # Sort individuals so the best is first
         sorted_pop = sorted(population, key=attrgetter("fitness"), reverse=False)
         
@@ -34,4 +36,4 @@ class UMDA(object):
             # Compute the probabilistic vectors (frequency of values in each variable)
              self.univ_prob[i,:] = np.sum(np.asarray(sorted_pop[:self.truncation])==i,axis=0)/self.truncation
         # It is possible to visualize the probability vectors by uncommenting the following line  
-        #print(self.univ_prob)  
+        print(self.univ_prob)
