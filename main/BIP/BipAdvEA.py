@@ -8,5 +8,5 @@ if __name__ == '__main__':
     # genNums = eval(sys.argv[3])
     # best, evals = BipEA(fName, pobSize, genNums)
     np.set_printoptions(suppress=True)
-    best, evals = BipEA('../Instances/BIP/test/Cebe.bip.n10.1', 10, 10, verbose=True)
+    best, evals = BipEA('../Instances/BIP/Cebe.bip.n50.1', 1000, 15, verbose=True)
     print (best, evals)

@@ -1,19 +1,17 @@
 import numpy as np
 
 from core.utils.ioutils import date_formatter, save
-from core.searches.ea.BipEA import BipEA
-from core.evaluators.BipEvaluator import readBipartInstance
-from experiments.Experiment import Experiment
-from main.BIP.BIPProblemVNS import BIPProblemVNS
-from main.BIP.BipAdvLocalSearch import BipAdvLocalSearch
+from core.searches.ea.QAPAGEA import QAPAGEA
+from core.evaluators.QAPEvaluator import Read_QAP_Instance
+from experiments.Experiment import Experiment, os
+from main.QAP.QAPProblemVNS import QAPProblemVNS
+from main.QAP.QAPAdvLocalSearch import QAPAdvLocalSearch
 from pandas import DataFrame
-import numpy as np
-import os
 import logging
 import sys
 import time
 
-log = logging.getLogger("BIPExperiments")
+log = logging.getLogger("QAPExperiments")
 log.setLevel(logging.INFO)
 ch = logging.StreamHandler(sys.stdout)
 ch.setLevel(logging.DEBUG)
@@ -22,10 +20,10 @@ ch.setFormatter(formatter)
 log.addHandler(ch)
 
 
-class BIPExperiment(Experiment):
+class QAPExperiment(Experiment):
     def __init__(self, experiments_dir, date_format='%d-%m-%Y'):
         """
-        Clase creada para ejecutar los algoritmos relacionados con el problema de bipartición del grafo
+        Clase creada para ejecutar los algoritmos relacionados con el problema de optimización cuadrática
         :param dir: directorio que contiene los archivos con las instancias para el experimento
         """
         Experiment.__init__(self, experiments_dir)
@@ -37,25 +35,23 @@ class BIPExperiment(Experiment):
     def ea_search_method(self, *argv):
         """
         Implementa la búsqueda local usando deap, AG
-        BipEA('../Instances/BIP/test/Cebe.bip.n10.1', 100, 12, verbose=True)
         """
-        return BipEA(argv[0], argv[1], argv[2], verbose=True)
+        return QAPAGEA(argv[0], argv[1], argv[2])
 
     def search_method(self, *argv):
         """
         Implementa la busqueda local para el experimento
         solution, n, instance, max_evals, nrep (& k)
         """
-        bipVNS = BIPProblemVNS(argv[0], argv[1], argv[2], argv[3], argv[4])
-        return bipVNS.basic_vns()
+        qapVNS = QAPProblemVNS(argv[0], argv[1], argv[2], argv[3], argv[4], argv[5], maximize=False)
+        return qapVNS.basic_vns()
 
     def sa_search_method(self, *argv):
         """
         Implementa la busqueda local para el experimento
         solution, n, instance, max_evals, nrep (& k) usando SA
-        bestsol, bestvals = BipAdvLocalSearch('../Instances/BIP/test/Cebe.bip.n10.1', [1,1,1,1,1,0,0,0,0,0],5000,100)
         """
-        return BipAdvLocalSearch(argv[0], argv[1], argv[2], argv[3])
+        return QAPAdvLocalSearch(argv[0], argv[1], argv[2], argv[3])
 
     @staticmethod
     def initialize(count, genetic, max_evals, sa, tmp, vns):
@@ -74,9 +70,7 @@ class BIPExperiment(Experiment):
 
     def experiment(self, from_evals=9, to_evals=16, gen_k=15, to_files=True, types=['VNS', 'SA', 'AG']):
         """
-
         solution, maxevals, nrep
-
         """
 
         # Se inicializan los nombres de los directorios para la persistencia
@@ -92,7 +86,7 @@ class BIPExperiment(Experiment):
         index = 0
         iter = 0
 
-        log.info("Iniciando el experimento")
+        log.info("QAP - Iniciando el experimento")
         for max_evals in range(from_evals, to_evals):
 
             iter += 1
@@ -110,10 +104,9 @@ class BIPExperiment(Experiment):
                 if 'VNS' in types:
                     start_time = time.time()
                     # Se obtienen la instancia BIP
-                    instance = readBipartInstance(file)
-                    n = instance.shape[1]
-                    solution = np.random.permutation(np.append(np.zeros(n / 2, dtype=int), np.ones(n / 2, dtype=int)))
-                    best_sol, best_vals = self.search_method(solution, n, instance, 2 ** max_evals, gen_k)
+                    vertices, mDist, mFlux = Read_QAP_Instance(file)
+                    solution = np.random.permutation(vertices)
+                    best_sol, best_vals = self.search_method(solution, vertices, mDist, mFlux, 2 ** max_evals, gen_k)
                     elapsed = time.time() - start_time
 
                     # Persistencia de las estadísticas para el posterior análisis
@@ -121,7 +114,7 @@ class BIPExperiment(Experiment):
                                                 max_evals, gen_k, iter, vns, self.today])
                     index += 1
                     if to_files:
-                        save(best_sol, best_vals, s_path, fName='/vns_bipresultsvals_')
+                        save(best_sol, best_vals, s_path, fName='/vns_qapresultsvals_')
 
                 if 'AG' in types:
                     # Genetic
@@ -134,7 +127,7 @@ class BIPExperiment(Experiment):
                                                 max_evals, gen_k, iter, genetic, self.today])
                     index += 1
                     if to_files:
-                        save(best_sol, best_vals, ea_path, fName='/ag_bipresultsvals_')
+                        save(best_sol, best_vals, ea_path, fName='/ag_qapresultsvals_')
 
                 if 'SA' in types:
                     # SA
@@ -147,7 +140,7 @@ class BIPExperiment(Experiment):
                                                max_evals, gen_k, iter, sa, self.today]
                     index += 1
                     if to_files:
-                        save(best_sol, best_vals, sa_path, fName='/sa_bipresultsvals_')
+                        save(best_sol, best_vals, sa_path, fName='/sa_qapresultsvals_')
 
                 count += 1
                 iter += 1
@@ -155,11 +148,10 @@ class BIPExperiment(Experiment):
         # Se guardan los estadisticos en un archivo
         self.results.to_csv(os.path.join(frame, 'frame' + date_formatter() + '.csv'), encoding='utf-8', na_rep=True,
                             index=False, sep=';')
-        log.info("Fin del experimento")
+        log.info("QAP - Fin del experimento")
 
 
 if __name__ == '__main__':
-    files_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'Instances/BIP'))
-    experiment = BIPExperiment(files_path)
-    # experiment.experiment(8, 16, 10, to_files=False, types=['AG'])
-    experiment.experiment(8, 16, 15, to_files=True)
+    files_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'Instances/QAP'))
+    experiment = QAPExperiment(files_path)
+    experiment.experiment(3, 4, 2, to_files=False)

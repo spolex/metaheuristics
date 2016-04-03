@@ -36,10 +36,12 @@ def evalBip(mWeight, n, fenotype):
     post:
     """
     fval = 0
-    if(not naturalSelection(fenotype)):
-        log.debug("Soy una solución inútil")
+    while(not naturalSelection(fenotype)):
+        log.info("Soy una solución inútil")
+        tools.mutFlipBit(fenotype, indpb=0.5)
         log.debug(fenotype)
-        return (fval, )
+        #return (fval, )
+    log.debug("Soy valido!!!")
     for i in range(n-1):
      for j in range(i+1,n):
        if fenotype[i]==1-fenotype[j]:      # Si estan en partes diferentes  
@@ -97,8 +99,8 @@ def BipEA(fName, pobSize, genNums, verbose=False):
     
     # Asociamos como función de aptitud la función evalBip
     toolbox.register("evaluate", evalBip, instance, n)
-    # Nuestro operador de cruzamiento será //TODO document
-    toolbox.register("mate", tools.cxOrdered)
+    # Nuestro operador de cruzamiento será
+    toolbox.register("mate", tools.cxUniform, indpb=1/((pobSize**0.9318)*(n**0.4535)))
     # El operador de mutación cambiará 1-->0  y 0-->1 con una probabilidad 
     # de mutación de 1/(lambda**0.9318)*(l**0.4535) recomendada
     toolbox.register("mutate", tools.mutShuffleIndexes, indpb=1/((pobSize**0.9318)*(n**0.4535)))

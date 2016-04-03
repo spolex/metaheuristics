@@ -78,8 +78,8 @@ def QAPAdvLocalSearch(fName, solution, max_eval, k, nrep = None, maxC= None, min
     # Se obtienen las matrices de distanci y flujo,
     n, mDist, mFluj = Read_QAP_Instance(fName)
     #Se crea la clase especifica para aplicar enfriamiento estadístico al problema
-    bip = QAPProblem(solution, n, mDist, mFluj, max_eval, k, nrep, maxC, minC)
-    return bip.search(True)
+    qap = QAPProblem(solution, n, mDist, mFluj, max_eval, k, nrep, maxC, minC)
+    return qap.search(True)
 
 if __name__ == '__main__':
     # fName = sys.argv[1]
