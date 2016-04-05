@@ -7,6 +7,5 @@ if __name__ == '__main__':
     # pobSize= eval(sys.argv[2])
     # genNums = eval(sys.argv[3])
     # best, evals = BipEA(fName, pobSize, genNums)
-    np.set_printoptions(suppress=True)
-    best, evals = BipEA('../Instances/BIP/Cebe.bip.n50.1', 1000, 15, verbose=True)
+    best, evals = BipEA('../Instances/BIP/Cebe.bip.n50.1', 1000, 15, verbose=False)
     print (best, evals)

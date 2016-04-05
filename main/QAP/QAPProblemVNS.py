@@ -19,7 +19,7 @@ class QAPProblemVNS(VNS):
             # Se crea la clase especifica para aplicar enfriamiento estadístico al problema //TODO establecer tiempos de CPU
             # nrep corresponde con el número de vecindarios
             VNS.__init__(self, init_solution, nrep, maximize, None)
-            # k=int(max_e/nrep) en este caso solo me interesa el mejor de cada búsqueda
+            # k=int(max_e/nrep) en este caso solo me interesa el mejor de cada vecindario búsqueda
             self.qap = QAPProblem(self.state, n, mDist, mFlux, int(max_e/nrep), int(max_e/nrep), nrep, maxC, minC, maximize=maximize)
         else:
             raise ValueError(" Error en los argumentos no ha sido posible obtener todos los elementos que conforman el problema ")
@@ -44,6 +44,7 @@ class QAPProblemVNS(VNS):
 
     def generate_n(self, *argv):
         """
+        Genera el conjunto de entornos de soluciones factibles
         """
         solution = argv[1]
         for k in range(argv[0]):

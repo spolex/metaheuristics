@@ -16,14 +16,14 @@ import time
 log = logging.getLogger("BIPExperiments")
 log.setLevel(logging.INFO)
 ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(logging.DEBUG)
+ch.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 ch.setFormatter(formatter)
 log.addHandler(ch)
 
 
 class BIPExperiment(Experiment):
-    def __init__(self, experiments_dir, date_format='%d-%m-%Y'):
+    def __init__(self, experiments_dir, date_format='%d-%m-%Y', verbose=False):
         """
         Clase creada para ejecutar los algoritmos relacionados con el problema de bipartición del grafo
         :param dir: directorio que contiene los archivos con las instancias para el experimento
@@ -33,13 +33,16 @@ class BIPExperiment(Experiment):
         self.results = DataFrame(
             columns=['time', 'max', 'min', 'median', 'max_evals', 'gen_k', 'iter', 'algorithm', 'date'])
         self.today = time.strftime(date_format)
+        self.verbose = verbose
+        if verbose:
+            log.setLevel(logging.DEBUG)
 
     def ea_search_method(self, *argv):
         """
         Implementa la búsqueda local usando deap, AG
         BipEA('../Instances/BIP/test/Cebe.bip.n10.1', 100, 12, verbose=True)
         """
-        return BipEA(argv[0], argv[1], argv[2], verbose=True)
+        return BipEA(argv[0], argv[1], argv[2], verbose=self.verbose)
 
     def search_method(self, *argv):
         """
@@ -121,7 +124,7 @@ class BIPExperiment(Experiment):
                                                 max_evals, gen_k, iter, vns, self.today])
                     index += 1
                     if to_files:
-                        save(best_sol, best_vals, s_path, fName='/vns_bipresultsvals_')
+                        save(best_sol, best_vals, s_path, fNames=['/sa_bipresultsol_','/sa_bipresultsvals_'])
 
                 if 'AG' in types:
                     # Genetic
@@ -134,7 +137,7 @@ class BIPExperiment(Experiment):
                                                 max_evals, gen_k, iter, genetic, self.today])
                     index += 1
                     if to_files:
-                        save(best_sol, best_vals, ea_path, fName='/ag_bipresultsvals_')
+                        save(best_sol, best_vals, ea_path, fNames=['/sa_bipresultsol_','/sa_bipresultsvals_'])
 
                 if 'SA' in types:
                     # SA
@@ -147,7 +150,7 @@ class BIPExperiment(Experiment):
                                                max_evals, gen_k, iter, sa, self.today]
                     index += 1
                     if to_files:
-                        save(best_sol, best_vals, sa_path, fName='/sa_bipresultsvals_')
+                        save(best_sol, best_vals, sa_path, fNames=['/sa_bipresultsol_','/sa_bipresultsvals_'])
 
                 count += 1
                 iter += 1
@@ -160,6 +163,6 @@ class BIPExperiment(Experiment):
 
 if __name__ == '__main__':
     files_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'Instances/BIP'))
-    experiment = BIPExperiment(files_path)
+    experiment = BIPExperiment(files_path, verbose=False)
     # experiment.experiment(8, 16, 10, to_files=False, types=['AG'])
-    experiment.experiment(8, 16, 15, to_files=True)
+    experiment.experiment(7, 10, 15, to_files=True)

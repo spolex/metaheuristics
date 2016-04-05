@@ -9,7 +9,7 @@ import copy
 log = logging.getLogger("Anneal")
 log.setLevel(logging.INFO)
 ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(logging.DEBUG)
+ch.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 ch.setFormatter(formatter)
 log.addHandler(ch)
@@ -25,7 +25,7 @@ class Anneal(object):
     maxC = 30000.
     minC = 3
     max_evals = 1000
-    nrep = 100
+    nrep = 1
     k = 10
     maximize = True
 
@@ -33,8 +33,9 @@ class Anneal(object):
         """
         :param init_solution: solución de partida
         :param max_e: número máximo de evaluaciones, valor por defecto 1000
-        :param k: almacenar mejor valor de la energía cada k evaluaciones, valor por defecto 100
-        :param nrep: número de evaluaciones sin variar la temperatura
+        :param k: almacenar mejor valor de la energía cada k evaluaciones, valor por defecto 10
+        :param nrep: número de evaluaciones sin variar la temperatura, valor por defecto 1 siguiendo el programa de
+        enfriamiento de Lundy y Mess (1986)
         :param maxC: valor máximo del parámetro de control, valor por defecto 30000
         :param minC: valor mínimo que puede alcanzar el parámetro de control c, valor por defecto 3
         :param maximize: boolean que determina si se maximiza o minimiza la función objetivo, por defecto se maximiza
@@ -101,9 +102,7 @@ class Anneal(object):
 
         self.start_message()
 
-        while evals < self.max_evals and not cool:
-            # Repetir hasta que el sistema esté frío o se alcance el número máximo de evaluaciones
-
+        while evals < self.max_evals and not cool:  # Repetir hasta que el sistema esté frío o se alcance el número máximo de evaluaciones
             for rep in range(self.nrep):    # número de repeticiones sin cambiar temperatura
                 evals += 1  # Se tiene en cuenta la evaluación inicial
                 log.debug("Searching {0:.0f}%".format((self.max_evals - evals) * 100 / self.max_evals))
@@ -140,7 +139,6 @@ class Anneal(object):
 
             c = self.control(c)
             cool = (c == self.minC)     # el sistema está frío cuando alcanza la temperatura mínima
-
         log.debug("Finish Simulated Annealing")
         return bestState, bestEnergies
 

@@ -25,7 +25,7 @@ def date_formatter(formatter='%d%m%Y-%H'):
     return time.strftime(formatter)
 
 
-def save(best_sol, best_vals, s_path, fName='file', ext='csv', log=None):
+def save(best_sol, best_vals, s_path, fNames=['sol','vals'], ext='csv', log=None):
     """
     Persistencia de todos los resultados de cada iteración de un experimentos, sin resumir
 
@@ -35,5 +35,5 @@ def save(best_sol, best_vals, s_path, fName='file', ext='csv', log=None):
     """
     if log:
         log.info("Guardando resultados en archivos: " + ext)
-    savetxt(s_path + fName + date_formatter() + '.'+ext, asarray(best_sol, dtype=int), delimiter=",")
-    savetxt(s_path + fName + date_formatter() + '.'+ext, asarray(best_vals), delimiter=",")
+    savetxt(s_path + fNames[0] + date_formatter() + '.'+ext, asarray(best_sol, dtype=int), delimiter=",")
+    savetxt(s_path + fNames[1] + date_formatter() + '.'+ext, asarray(best_vals), delimiter=",")

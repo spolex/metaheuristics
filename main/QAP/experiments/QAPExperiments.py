@@ -114,7 +114,7 @@ class QAPExperiment(Experiment):
                                                 max_evals, gen_k, iter, vns, self.today])
                     index += 1
                     if to_files:
-                        save(best_sol, best_vals, s_path, fName='/vns_qapresultsvals_')
+                        save(best_sol, best_vals, s_path, fNames=['/vns_qapresultsol_', '/vns_qapresultsvals_'])
 
                 if 'AG' in types:
                     # Genetic
@@ -127,7 +127,7 @@ class QAPExperiment(Experiment):
                                                 max_evals, gen_k, iter, genetic, self.today])
                     index += 1
                     if to_files:
-                        save(best_sol, best_vals, ea_path, fName='/ag_qapresultsvals_')
+                        save(best_sol, best_vals, ea_path, fNames=['/vns_qapresultsol_', '/vns_qapresultsvals_'])
 
                 if 'SA' in types:
                     # SA
@@ -140,7 +140,7 @@ class QAPExperiment(Experiment):
                                                max_evals, gen_k, iter, sa, self.today]
                     index += 1
                     if to_files:
-                        save(best_sol, best_vals, sa_path, fName='/sa_qapresultsvals_')
+                        save(best_sol, best_vals, sa_path, fNames=['/vns_qapresultsol_', '/vns_qapresultsvals_'])
 
                 count += 1
                 iter += 1
@@ -154,4 +154,4 @@ class QAPExperiment(Experiment):
 if __name__ == '__main__':
     files_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'Instances/QAP'))
     experiment = QAPExperiment(files_path)
-    experiment.experiment(3, 4, 2, to_files=False)
+    experiment.experiment(7, 10, 15, to_files=True)

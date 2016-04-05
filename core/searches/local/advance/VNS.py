@@ -97,7 +97,7 @@ class VNS(object):
                     neighborhood = 1
                 else:
                     neighborhood += 1
-            self.best_evals = np.insert(self.best_evals,len(self.best_evals),self.cost)
+            self.best_evals = np.insert(self.best_evals, len(self.best_evals), self.cost)
         elapsed = time.time() - start
         log.info("Duración {:.3f} seconds".format(elapsed))
         log.info("Número de re-arranques {}".format(control-neighborhood))

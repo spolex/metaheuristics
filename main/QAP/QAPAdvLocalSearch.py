@@ -15,8 +15,10 @@ class QAPProblem(Anneal):
     Clase que hereda de la clase Anneal del módulo core.searches.local.advance.Anneal, que implementa el enfriamiento estadístico generalizado. BIPProblem cubre
     el problema de bipartición balanceada del grafo.
     """
-    def __init__(self, solution, n=None, mDist=None, mFlux=None, max_e= None, k= None , nrep = None, maxC= None, minC=None, maximize=False):
-
+    def __init__(self, solution, n=None, mDist=None, mFlux=None, max_e= None, k= None , nrep=1, maxC= None, minC=None, maximize=False):
+        """
+        nrep=1 Lundy & Mess (1986)
+        """
         if mDist is not None and mFlux is not None and n:
             self.mDist = mDist
             self.n = n
@@ -39,10 +41,11 @@ class QAPProblem(Anneal):
         self.state = neighbour[randint(0, neighbour.shape[0]-1)]
 
 
-def QAPAdvLocalSearch(fName, solution, max_eval, k, nrep = None, maxC= None, minC=None):
+def QAPAdvLocalSearch(fName, solution, max_eval, k, nrep = 1, maxC= None, minC=None):
 
     """
     Método búsqueda VNS usando enfriamiento estadístico como búsqueda local
+    nrep=1 Lundy & Mess (1986)
     :param fName: archivo con la instancia del problema de asignación cuadrática
     Formato txt:
     10
