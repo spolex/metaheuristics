@@ -23,7 +23,7 @@ setup(
     # What does your project relate to?
     keywords='sample setuptools development',
 
-    install_requires=['numpy', 'pandas', 'deap', 'scipy'],
+    install_requires=['numpy', 'pandas', 'deap'],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,

@@ -12,12 +12,12 @@ def mut_unbalance(individual):
     suma = sum(individual)
 
     while suma > size/2:
-        i = random.randint(0, size)
+        i = random.randint(0, size-1)
         individual[i] = 0
         suma = sum(individual)
 
     while suma < size/2:
-        i = random.randint(0, size)
+        i = random.randint(0, size-1)
         individual[i] = 1
         suma = sum(individual)
 

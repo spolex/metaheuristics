@@ -31,7 +31,7 @@ class BIPExperiment(Experiment):
         Experiment.__init__(self, experiments_dir)
         self.getFiles(experiments_dir)
         self.results = DataFrame(
-            columns=['time', 'max', 'min', 'median', 'max_evals', 'gen_k', 'iter', 'algorithm', 'date'])
+            columns=['time', 'max', 'min', 'median', 'max_evals', 'gen_k', 'iter', 'algorithm', 'date', 'file'])
         self.today = time.strftime(date_format)
         self.verbose = verbose
         if verbose:
