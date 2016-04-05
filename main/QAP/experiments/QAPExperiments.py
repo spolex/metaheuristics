@@ -29,7 +29,7 @@ class QAPExperiment(Experiment):
         Experiment.__init__(self, experiments_dir)
         self.getFiles(experiments_dir)
         self.results = DataFrame(
-            columns=['time', 'max', 'min', 'median', 'max_evals', 'gen_k', 'iter', 'algorithm', 'date'])
+            columns=['time', 'max', 'min', 'median', 'max_evals', 'gen_k', 'iter', 'algorithm', 'date', 'file'])
         self.today = time.strftime(date_format)
 
     def ea_search_method(self, *argv):
@@ -74,7 +74,7 @@ class QAPExperiment(Experiment):
         """
 
         # Se inicializan los nombres de los directorios para la persistencia
-        tmp = '_results'
+        tmp = self.today+'_results'
         frame = os.path.join(tmp, 'Final')
         if not os.path.exists(frame):
             os.makedirs(frame)
@@ -102,6 +102,7 @@ class QAPExperiment(Experiment):
                     ea_path, s_path, sa_path = self.initialize(count, genetic, max_evals, sa, tmp, vns)
 
                 if 'VNS' in types:
+                    log.info("Iteración {} VNS".format(iter))
                     start_time = time.time()
                     # Se obtienen la instancia BIP
                     vertices, mDist, mFlux = Read_QAP_Instance(file)
@@ -111,33 +112,36 @@ class QAPExperiment(Experiment):
 
                     # Persistencia de las estadísticas para el posterior análisis
                     self.results.loc[index] = ([elapsed, np.max(best_vals), np.min(best_vals), np.mean(best_vals),
-                                                max_evals, gen_k, iter, vns, self.today])
+                                                max_evals, gen_k, iter, vns, self.today, file])
+                    log.info(self.results.loc[index])
                     index += 1
                     if to_files:
                         save(best_sol, best_vals, s_path, fNames=['/vns_qapresultsol_', '/vns_qapresultsvals_'])
 
                 if 'AG' in types:
-                    # Genetic
+                    log.info("Iteración {} AG".format(iter))
                     start_time = time.time()
                     best_sol, best_vals = self.ea_search_method(file, 2 ** max_evals, gen_k)
                     elapsed = time.time() - start_time
 
                     # persistencia de los resultados
                     self.results.loc[index] = ([elapsed, np.max(best_vals), np.min(best_vals), np.mean(best_vals),
-                                                max_evals, gen_k, iter, genetic, self.today])
+                                                max_evals, gen_k, iter, genetic, self.today, file])
+                    log.info(self.results.loc[index])
                     index += 1
                     if to_files:
                         save(best_sol, best_vals, ea_path, fNames=['/vns_qapresultsol_', '/vns_qapresultsvals_'])
 
                 if 'SA' in types:
-                    # SA
+                    log.info("Iteración {} SA".format(iter))
                     start_time = time.time()
                     best_sol, best_vals = self.sa_search_method(file, solution, 2 ** max_evals, gen_k)
                     elapsed = time.time() - start_time
 
                     # persistencia de los resultados
                     self.results.loc[index] = [elapsed, np.max(best_vals), np.min(best_vals), np.mean(best_vals),
-                                               max_evals, gen_k, iter, sa, self.today]
+                                               max_evals, gen_k, iter, sa, self.today, file]
+                    log.info(self.results.loc[index])
                     index += 1
                     if to_files:
                         save(best_sol, best_vals, sa_path, fNames=['/vns_qapresultsol_', '/vns_qapresultsvals_'])
@@ -150,8 +154,86 @@ class QAPExperiment(Experiment):
                             index=False, sep=';')
         log.info("QAP - Fin del experimento")
 
+    def wxExperiment(self, max_evals=7, gen_k=15, to_files=True, types=['VNS', 'SA', 'AG']):
+            """
+            solution, maxevals, nrep
+            """
+
+            # Se inicializan los nombres de los directorios para la persistencia
+            tmp = self.today + '_results'
+            frame = os.path.join(tmp, 'Final')
+            if not os.path.exists(frame):
+                os.makedirs(frame)
+            vns = 'VNS'
+            genetic = 'AG'
+            sa = 'SA'
+
+            log.info("QAP - Iniciando el experimento")
+            count = 0 # index para data frame
+            for index in range(10):
+
+                log.info("Iteración {}".format(index))
+
+                for file in self.files:
+                    # Si el parámetro indica guardar todos los resultados n archivos
+                    log.debug("Recorriendo los archivos de instancias")
+                    if to_files:
+                        # Initialize paths
+                        ea_path, s_path, sa_path = self.initialize(index, genetic, max_evals, sa, tmp, vns)
+
+                    if 'VNS' in types:
+                        log.info("Iteración {} VNS".format(index))
+                        start_time = time.time()
+                        # Se obtienen la instancia BIP
+                        vertices, mDist, mFlux = Read_QAP_Instance(file)
+                        solution = np.random.permutation(vertices)
+                        best_sol, best_vals = self.search_method(solution, vertices, mDist, mFlux, 2 ** max_evals, gen_k)
+                        elapsed = time.time() - start_time
+
+                        # Persistencia de las estadísticas para el posterior análisis
+                        self.results.loc[count] = ([elapsed, np.max(best_vals), np.min(best_vals), np.mean(best_vals),
+                                                    max_evals, gen_k, index, vns, self.today, file])
+                        log.info(self.results.loc[count])
+                        count += 1
+                        if to_files:
+                            save(best_sol, best_vals, s_path, fNames=['/vns_qapresultsol_', '/vns_qapresultsvals_'])
+
+                    if 'AG' in types:
+                        log.info("Iteración {} AG".format(index))
+                        start_time = time.time()
+                        best_sol, best_vals = self.ea_search_method(file, 2 ** max_evals, gen_k)
+                        elapsed = time.time() - start_time
+
+                        # persistencia de los resultados
+                        self.results.loc[count] = ([elapsed, np.max(best_vals), np.min(best_vals), np.mean(best_vals),
+                                                    max_evals, gen_k, index, genetic, self.today, file])
+                        log.info(self.results.loc[count])
+                        count += 1
+                        if to_files:
+                            save(best_sol, best_vals, ea_path, fNames=['/vns_qapresultsol_', '/vns_qapresultsvals_'])
+
+                    if 'SA' in types:
+                        log.info("Iteración {} SA".format(index))
+                        start_time = time.time()
+                        best_sol, best_vals = self.sa_search_method(file, solution, 2 ** max_evals, gen_k)
+                        elapsed = time.time() - start_time
+
+                        # persistencia de los resultados
+                        self.results.loc[count] = [elapsed, np.max(best_vals), np.min(best_vals), np.mean(best_vals),
+                                                   max_evals, gen_k, index, sa, self.today, file]
+                        log.info(self.results.loc[count])
+                        count += 1
+                        if to_files:
+                            save(best_sol, best_vals, sa_path, fNames=['/vns_qapresultsol_', '/vns_qapresultsvals_'])
+
+            # Se guardan los estadisticos en un archivo
+            self.results.to_csv(os.path.join(frame, 'frame' + date_formatter() + '.csv'), encoding='utf-8', na_rep=True,
+                                index=False, sep=';')
+            log.info("QAP - Fin del experimento")
+
 
 if __name__ == '__main__':
     files_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'Instances/QAP'))
     experiment = QAPExperiment(files_path)
-    experiment.experiment(7, 10, 15, to_files=True)
+    #experiment.experiment(7, 15, 10, to_files=True)
+    experiment.wxExperiment()

@@ -8,7 +8,8 @@ import logging
 import sys
 import numpy as np
 from deap import base, creator, tools, algorithms
-from core.evaluators import BipEvaluator as bie
+from core.evaluators.BipEvaluator import readBipartInstance
+from core.operators.Mutators import mut_unbalance
 
 log = logging.getLogger("BipEA")
 log.setLevel(logging.INFO)
@@ -36,17 +37,16 @@ def evalBip(mWeight, n, fenotype):
     post:
     """
     fval = 0
-    while(not naturalSelection(fenotype)):
-        log.info("Soy una solución inútil")
-        tools.mutFlipBit(fenotype, indpb=0.5)
+    if(not naturalSelection(fenotype)):
+        log.info("Se están generando soluciones desbalanceadas")
         log.debug(fenotype)
         #return (fval, )
     log.debug("Soy valido!!!")
     for i in range(n-1):
      for j in range(i+1,n):
        if fenotype[i]==1-fenotype[j]:      # Si estan en partes diferentes  
-          fval = fval+mWeight[i,j] 
-    return (fval,)
+          fval = fval+mWeight[i,j]
+    return fval,
 
 
 def createMaxRace():
@@ -80,8 +80,7 @@ def buildBipRandomPopulation(size, l, toolbox):
 
 def BipEA(fName, pobSize, genNums, verbose=False):
     """
-    Pre:El problema que resuelve es de maximización.
-    Post:
+    ALgoritmo genético para el problema de Bipartición balanceada del grafo.
     """
     if verbose:
         log.setLevel(logging.DEBUG)
@@ -91,7 +90,7 @@ def BipEA(fName, pobSize, genNums, verbose=False):
     toolbox = base.Toolbox()
     
     # Leemos la instancia del problema de Bipartición del grafo    
-    instance = bie.readBipartInstance(fName)
+    instance = readBipartInstance(fName)
     n = instance.shape[0]
     
     # Obtenemos la población inicial de soluciones factibles de forma aleatoria
@@ -101,9 +100,11 @@ def BipEA(fName, pobSize, genNums, verbose=False):
     toolbox.register("evaluate", evalBip, instance, n)
     # Nuestro operador de cruzamiento será
     toolbox.register("mate", tools.cxUniform, indpb=1/((pobSize**0.9318)*(n**0.4535)))
-    # El operador de mutación cambiará 1-->0  y 0-->1 con una probabilidad 
+    # El operador de mutación cambiará 1-->0  y 0-->1
+    # hasta balancear el individuo cuando un cruce termine en un individuo NO factible
+    toolbox.register("mutate", mut_unbalance)
     # de mutación de 1/(lambda**0.9318)*(l**0.4535) recomendada
-    toolbox.register("mutate", tools.mutShuffleIndexes, indpb=1/((pobSize**0.9318)*(n**0.4535)))
+    # toolbox.register("mutate", tools.mutShuffleIndexes, indpb=1/((pobSize**0.9318)*(n**0.4535)))
     # Usaremos selección por torneo con un parámetro de torneo = 3
     toolbox.register("select", tools.selTournament, tournsize=3)
 

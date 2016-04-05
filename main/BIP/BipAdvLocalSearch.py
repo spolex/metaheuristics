@@ -16,7 +16,7 @@ class BIPProblem(Anneal):
     Clase que hereda de la clase Anneal del módulo core.searches.local.advance.Anneal, que implementa el enfriamiento estadístico generalizado. BIPProblem cubre
     el problema de bipartición balanceada del grafo.
     """
-    def __init__(self, solution, instance = None, max_e= None, k= None , nrep = 1, maxC= None, minC=None):
+    def __init__(self, solution, instance=None, max_e=None, k=None , nrep=1, maxC=None, minC=None):
         """
         nrep=1 Lundy & Mess (1986)
         """
@@ -75,14 +75,14 @@ def BipAdvLocalSearch(fName, solution, max_eval, k, nrep = 1, maxC= None, minC=N
     return bip.search(True)
 
 if __name__ == '__main__':
-    fName = sys.argv[1]
-    sol = eval(sys.argv[2])
-    max_evals = eval(sys.argv[3])
-    k = eval(sys.argv[4])
-    bestsol, bestvals = BipAdvLocalSearch(fName , sol, max_evals, k)
+    # fName = sys.argv[1]
+    # sol = eval(sys.argv[2])
+    # max_evals = eval(sys.argv[3])
+    # k = eval(sys.argv[4])
+    # bestsol, bestvals = BipAdvLocalSearch(fName , sol, max_evals, k)
     # bestsol, bestvals = BipAdvLocalSearch('../Instances/BIP/test/Cebe.bip.n10.1', [1,1,1,1,1,0,0,0,0,0],5000,100)
-    # sol = np.concatenate((np.ones([25],dtype=int),np.zeros([25],dtype=int)), axis=0)
-    # bestsol, bestval = BipAdvLocalSearch('../Instances/BIP/Cebe.bip.n50.1', np.random.permutation(sol), 5000, 100)
+    sol = np.concatenate((np.ones([25], dtype=int), np.zeros([25], dtype=int)), axis=0)
+    bestsol, bestvals = BipAdvLocalSearch('../Instances/BIP/Cebe.bip.n50.2', np.random.permutation(sol), 3000, 15)
     print(bestsol, bestvals)
 
 

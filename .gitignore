@@ -7,5 +7,6 @@ doc/build/doctrees
 /Metaheuristicos.egg-info
 /main/BIP/_results
 /core/searches/ea/AG.py
+/main/QAP/experiments/*_results
 /main/Instances/BIP/*/*
 doc/build/latex
