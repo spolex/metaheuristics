@@ -24,7 +24,7 @@ class VNS(object):
     N = list([])  # vecindarios
     best_evals = np.array([])  # para devolver las mejores evaluaciones
 
-    def __init__(self, init_solution=None, neigh_max=None, maximize=None, tmax= None):
+    def __init__(self, init_solution=None, neigh_max=None, maximize=None):
         """
         :param init_solution: solución de partida
         :param max_e: número máximo de evaluaciones, valor por defecto 1000
@@ -41,8 +41,6 @@ class VNS(object):
                 self.N = [np.array([]) for i in range(neigh_max)]
             if maximize is not None:
                 self.maximize = maximize
-            if tmax:
-                self.tmax = tmax
         else:
             raise ValueError("Es necesaria una solución óptima inicial")
 

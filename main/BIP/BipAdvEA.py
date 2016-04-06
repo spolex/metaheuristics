@@ -7,5 +7,5 @@ if __name__ == '__main__':
     # pobSize= eval(sys.argv[2])
     # genNums = eval(sys.argv[3])
     # best, evals = BipEA(fName, pobSize, genNums)
-    best, evals = BipEA('../Instances/BIP/Cebe.bip.n50.2', 3000, 15, verbose=False)
+    best, evals = BipEA('../Instances/BIP/Cebe.bip.n50.2', 3000, 15, verbose=True)
     print (best, evals)

@@ -5,8 +5,9 @@ __pycache__/
 .idea
 doc/build/doctrees
 /Metaheuristicos.egg-info
-/main/BIP/_results
-/core/searches/ea/AG.py
-/main/QAP/experiments/*_results
-/main/Instances/BIP/*/*
+core/searches/ea/AG.py
+main/QAP/experiments/*_results
+main/BIP/*_results
+main/Instances/BIP/test
+main/Instances/QAP/test
 doc/build/latex

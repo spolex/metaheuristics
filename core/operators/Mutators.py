@@ -1,5 +1,6 @@
 import random
 
+
 def mut_unbalance(individual):
     """Muta un individuo de elementos binarios hasta lograr el mismo número de unos y ceros.
 

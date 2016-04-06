@@ -40,7 +40,7 @@ def evalBip(mWeight, n, fenotype):
     if(not naturalSelection(fenotype)):
         log.info("Se están generando soluciones desbalanceadas")
         log.debug(fenotype)
-        #return (fval, )
+        # return (fval, ) # se penalizan las soluciones desbalanceadas
     log.debug("Soy valido!!!")
     for i in range(n-1):
      for j in range(i+1,n):
@@ -117,8 +117,8 @@ def BipEA(fName, pobSize, genNums, verbose=False):
     hof = tools.HallOfFame(1, similar=np.array_equal)
     
     # Probabilidad de cruzamiento 0.8
-    # Probabilidad de aplicar el operador de mutación 0.2    
-    rdo = algorithms.eaSimple(population, toolbox, stats=stats, cxpb=0.8, mutpb=0.2, ngen=genNums, halloffame=hof, verbose=True)
+    # Probabilidad de aplicar el operador de mutación 1.0, para evitar soluciones desbalanceadas
+    rdo = algorithms.eaSimple(population, toolbox, stats=stats, cxpb=0.8, mutpb=1.0, ngen=genNums, halloffame=hof, verbose=True)
     
     evals = [dic['max'] for dic in rdo[1]]
     for i in range(1, len(evals)):

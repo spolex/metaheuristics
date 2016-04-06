@@ -160,7 +160,7 @@ class QAPExperiment(Experiment):
             """
 
             # Se inicializan los nombres de los directorios para la persistencia
-            tmp = self.today + '_results'
+            tmp = self.today + '_results_qap'
             frame = os.path.join(tmp, 'Final')
             if not os.path.exists(frame):
                 os.makedirs(frame)
@@ -227,7 +227,7 @@ class QAPExperiment(Experiment):
                             save(best_sol, best_vals, sa_path, fNames=['/vns_qapresultsol_', '/vns_qapresultsvals_'])
 
             # Se guardan los estadisticos en un archivo
-            self.results.to_csv(os.path.join(frame, 'frame' + date_formatter() + '.csv'), encoding='utf-8', na_rep=True,
+            self.results.to_csv(os.path.join(frame, 'frame-qap-' + date_formatter() + '.csv'), encoding='utf-8', na_rep=True,
                                 index=False, sep=';')
             log.info("QAP - Fin del experimento")
 
