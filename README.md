@@ -63,7 +63,6 @@ Instrucciones de instalación
     QAPAdvEA('../../Instances/QAP/Cebe.qap.n10.1', [1,2,3,4,5,6,7,8,9,10],100,10)    
     ```
 ### Authors
------------
 
 - Iñigo Sánchez Méndez (spolex)
 (spolexdroid@gmail.com)
